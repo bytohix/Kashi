@@ -1,2 +1,0 @@
-# Kashi
-Pasargard HTML Template
