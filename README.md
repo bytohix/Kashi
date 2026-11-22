@@ -1,2 +1,2 @@
-# pasargard-template
+# Kashi
 Pasargard HTML Template
