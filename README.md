@@ -187,3 +187,21 @@ sudo nano /opt/receipt/receipt.conf  # تنظیمات (بعد از تغییر: s
 پورت 19001 در `v2/install.sh` و `v2/index.html` تعریف شده است. اگر آن را عوض می‌کنید، باید در هر دو فایل یکسان باشد.
 
 </div>
+
+<div dir="rtl">
+
+---
+
+## سازنده
+
+ساخته‌شده توسط **Tohid** ([@bytohix](https://github.com/bytohix))
+
+اگه این قالب به دردت خورد، با یک ⭐ روی ریپو حمایت کن.
+
+</div>
+
+<p align="center">
+  <a href="https://t.me/tohid35">
+    <img src="https://img.shields.io/badge/Telegram-@tohid35-2AABEE?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram">
+  </a>
+</p>
