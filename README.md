@@ -194,7 +194,7 @@ sudo nano /opt/receipt/receipt.conf  # تنظیمات (بعد از تغییر: s
 
 ## سازنده
 
-ساخته‌شده توسط **Tohid** ([@bytohix](https://github.com/bytohix))
+ساخته‌شده توسط [@bytohix](https://github.com/bytohix))
 
 اگه این قالب به دردت خورد، با یک ⭐ روی ریپو حمایت کن.
 
