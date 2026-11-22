@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F0E4">
+  <title>اشتراک</title>
+  <style>
+    @font-face {
+      font-family: "Vazirmatn";
+      src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2") format("woff2 supports variations"),
+           url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2") format("woff2-variations");
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #F6F0E4;
+      --paper: #FCF9F2;
+      --ink: #14183A;
+      --navy: #2B3A72;
+      --blue: #364B85;
+      --brick: #963829;
+      --teal: #38767A;
+      --green: #3C5B45;
+      --sage: #7FA37D;
+      --gold: #E0A63A;
+      --muted: #5A5E78;
+      --bw: 3px;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: "Vazirmatn", "Segoe UI", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      padding: max(22px, env(safe-area-inset-top)) 14px max(24px, env(safe-area-inset-bottom));
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, a { font: inherit; }
+    button { -webkit-appearance: none; appearance: none; }
+    .page { width: min(100%, 500px); margin: 0 auto; }
+    .hidden { display: none !important; }
+    .card { background: var(--paper); border: var(--bw) solid var(--ink); border-radius: 16px; }
+
+    /* login */
+    .login-card { padding: 24px; }
+    .login-title { margin: 0 0 14px; font-size: 30px; font-weight: 900; }
+    .field-label { display: block; margin: 0 2px 7px; color: var(--muted); font-size: 13px; font-weight: 700; }
+    .field {
+      width: 100%; min-height: 50px; margin-bottom: 14px; padding: 12px 14px;
+      border: var(--bw) solid var(--ink); border-radius: 12px; background: #fff; color: var(--ink);
+      direction: ltr; text-align: left; outline: none;
+    }
+    .field:focus { box-shadow: 0 0 0 3px rgba(56, 118, 122, 0.45); }
+    .primary-btn {
+      width: 100%; min-height: 52px; border: var(--bw) solid var(--ink); border-radius: 12px;
+      color: #F6F0E4; background: var(--navy); cursor: pointer; font-size: 16px; font-weight: 800;
+      transition: transform 0.12s;
+    }
+    .primary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .primary-btn:active, .happ-btn:active, .cfg-btn:active,
+    .copy-all-btn:active, .qr-close:active { transform: scale(0.97); }
+
+    .error {
+      margin: 0 0 14px; padding: 12px 14px; color: #6B1E14; background: #F3C8C0;
+      border: var(--bw) solid var(--ink); border-radius: 12px; font-size: 14px; line-height: 1.7; font-weight: 700;
+    }
+
+    .page-loading {
+      position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px;
+      background: rgba(246, 240, 228, 0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+    .loading-text {
+      padding: 12px 20px; border: var(--bw) solid var(--ink); border-radius: 12px;
+      background: var(--paper); font-size: 15px; font-weight: 800;
+    }
+
+    #main { display: none; opacity: 0; }
+    #main.visible { display: block; animation: show-main 0.25s ease forwards; }
+    @keyframes show-main { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* tabs */
+
+    /* announce */
+    .announce {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 16px; margin-bottom: 14px; background: #F6E3B5;
+      line-height: 1.7; text-align: center; font-size: 14px; font-weight: 700;
+    }
+    .announce-dot {
+      width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: #ef4444;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.62); animation: announce-pulse 1.5s ease-out infinite;
+    }
+    .announce-text { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+    .announce a { color: var(--brick); text-decoration: none; border-bottom: 2px solid currentColor; }
+    @keyframes announce-pulse { 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+    /* header */
+    .profile { margin-bottom: 20px; }
+    .head-card {
+      display: flex; align-items: stretch; min-height: 92px; margin-bottom: 16px;
+      background: var(--paper); border: var(--bw) solid var(--ink); border-radius: 16px; overflow: hidden;
+    }
+    .head-tag {
+      display: grid; place-items: center; padding: 0 20px; background: var(--navy);
+      color: #F6F0E4; font-size: 26px; font-weight: 900; white-space: nowrap;
+    }
+    .head-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 12px 16px; }
+    .head-user { flex: 1; min-width: 0; }
+    .user-label { margin: 0; font-size: 16px; font-weight: 800; }
+    .username {
+      margin: 2px 0 0; direction: ltr; text-align: right; overflow: hidden; text-overflow: ellipsis;
+      white-space: nowrap; font-size: 28px; line-height: 1.25; font-weight: 900;
+    }
+    .status-pill {
+      padding: 6px 14px; border-radius: 10px; background: var(--sage); color: #1E3A28;
+      font-size: 15px; font-weight: 900; white-space: nowrap;
+    }
+    .status-pill.disabled, .status-pill.expired { background: #E7A29A; color: #6B1E14; }
+    .status-pill.limited, .status-pill.on_hold { background: #EBC36B; color: #5A3B00; }
+
+    /* meters */
+    .meters { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .meter { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 14px 12px; border-radius: 12px; color: #F6F0E4; }
+    .data-meter { background: var(--green); border: 5px solid var(--teal); box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px var(--gold); }
+    .time-meter { background: var(--teal); border: 5px solid var(--sage); box-shadow: 0 0 0 2px var(--ink), inset 0 0 0 2px #8DBDBF; }
+    .meter-label { margin: 0; align-self: flex-start; padding: 4px 12px; border-radius: 8px; background: #fff; color: var(--ink); font-size: 14px; font-weight: 900; }
+    .meter-value { margin: 0; font-size: clamp(22px, 7vw, 30px); line-height: 1.25; font-weight: 900; text-align: right; }
+    .meter-note { font-size: 14px; font-weight: 900; text-align: right; }
+
+    .progress-track {
+      position: relative; height: 34px; border: var(--bw) solid var(--ink); border-radius: 9px;
+      background: #fff; overflow: hidden;
+    }
+    .progress-fill {
+      position: absolute; inset-block: 0; right: 0; width: var(--p, 0%); min-width: 48px;
+      background: var(--navy); transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .time-meter .progress-fill { background: var(--brick); }
+    .progress-label {
+      position: absolute; inset: 0; display: grid; place-items: center; color: #fff;
+      font-size: 13px; font-weight: 900; direction: ltr; white-space: nowrap;
+    }
+    .progress-fill.low { min-width: 0; }
+    .progress-fill.low .progress-label { inset: 0 100% 0 auto; padding: 0 8px; color: var(--ink); }
+
+    /* sections */
+    .content-stack { display: grid; gap: 24px; margin-bottom: 14px; }
+    .section-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .section-title { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 30px; font-weight: 900; }
+    .section-title svg { width: 28px; height: 28px; flex-shrink: 0; }
+    .copy-all-btn {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px;
+      border: none; border-radius: 999px; background: var(--ink); color: #F6F0E4;
+      font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: transform 0.12s;
+    }
+    .copy-all-btn svg { width: 18px; height: 18px; }
+    .copy-all-btn.copied { background: var(--green); }
+
+    /* configs */
+    .cfg-card { padding: 6px; border: var(--bw) solid var(--ink); border-radius: 20px; background: var(--paper); }
+    .cfg-list { border: var(--bw) solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--paper); }
+    .cfg-row { display: flex; align-items: stretch; min-height: 58px; }
+    .cfg-num {
+      position: relative; width: 64px; flex: 0 0 64px; display: grid; place-items: center;
+      color: #F6F0E4; font-size: 30px; font-weight: 900; border-bottom: var(--bw) solid var(--ink);
+    }
+    .cfg-num.blue { background: var(--blue); }
+    .cfg-num.red { background: var(--brick); }
+    .cfg-num.gold { background: var(--gold); }
+    .cfg-row:first-child .cfg-num { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%); }
+    .cfg-row:first-child .cfg-num::after {
+      content: ""; position: absolute; top: 0; right: 0; width: 18px; height: 18px;
+      background: #E8DFC9; clip-path: polygon(0 0, 0 100%, 100% 100%);
+    }
+    .cfg-label {
+      position: relative; flex: 1; min-width: 0; display: flex; align-items: center;
+      padding: 0 14px 0 34px;
+    }
+    .cfg-label::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: var(--bw); background: var(--ink); }
+    .cfg-label::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--bw);
+      background: var(--ink); transform-origin: 0 100%; transform: skewX(-28deg);
+    }
+    .cfg-row:last-child .cfg-num { border-bottom: none; }
+    .cfg-row:last-child .cfg-label::after { display: none; }
+    .cfg-title {
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; width: 100%;
+      overflow: hidden; word-break: break-word; unicode-bidi: plaintext; text-align: right;
+      font-size: 17px; line-height: 1.3; font-weight: 900;
+    }
+    .cfg-actions { display: flex; align-items: center; gap: 7px; padding: 0 10px; }
+    .cfg-btn {
+      width: 38px; height: 38px; display: inline-flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 0; padding: 0; border: var(--bw) solid var(--ink); border-radius: 9px;
+      background: var(--paper); color: var(--ink); cursor: pointer; font-size: 9px; font-weight: 800;
+      line-height: 1.05; transition: transform 0.12s, background 0.15s;
+    }
+    .cfg-btn svg { width: 18px; height: 18px; display: block; }
+    .cfg-btn.btn-copy svg { width: 14px; height: 14px; }
+    .cfg-btn.copied { background: var(--sage); }
+    .empty { padding: 26px 16px; color: var(--muted); text-align: center; font-size: 14px; font-weight: 700; }
+
+    /* apps */
+    .apps-grid {
+      display: grid; grid-template-columns: 1fr 1fr; border: var(--bw) solid var(--ink);
+      border-radius: 16px; overflow: hidden;
+    }
+    .happ-card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 18px 14px 16px; color: #F6F0E4; }
+    .happ-card[data-platform="android"] { background: var(--green); }
+    .happ-card[data-platform="ios"] { background: var(--navy); }
+    .happ-top { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .happ-name { font-size: clamp(30px, 9vw, 40px); font-weight: 900; line-height: 1.1; }
+    .happ-icon { width: clamp(30px, 9vw, 40px); height: clamp(30px, 9vw, 40px); flex-shrink: 0; color: #F6F0E4; line-height: 0; }
+    .happ-icon svg { width: 100%; height: 100%; display: block; }
+    .happ-platform { font-size: 17px; font-weight: 800; }
+    .happ-btn {
+      width: 100%; margin-top: 10px; min-height: 48px; display: flex; align-items: center; justify-content: center;
+      padding: 8px 10px; border-radius: 10px; text-decoration: none; text-align: center;
+      font-size: 14px; font-weight: 900; transition: transform 0.12s;
+    }
+    .happ-btn.android { background: var(--navy); color: #F6F0E4; border: 3px solid #F6F0E4; }
+    .happ-btn.ios { background: var(--teal); color: #F6F0E4; border: 3px solid #8DBDBF; }
+    .apps-hint { margin: 14px 4px 0; font-size: 14px; font-weight: 700; line-height: 1.9; }
+
+    /* toast + qr */
+    .toast {
+      position: fixed; z-index: 100; bottom: max(20px, env(safe-area-inset-bottom)); left: 50%;
+      transform: translateX(-50%) translateY(74px); opacity: 0; pointer-events: none;
+      padding: 12px 22px; border-radius: 12px; background: var(--ink); color: #F6F0E4;
+      font-size: 14px; font-weight: 800; transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .qr-modal {
+      position: fixed; inset: 0; z-index: 120; display: none; align-items: center; justify-content: center;
+      padding: 22px; background: rgba(20, 24, 58, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    }
+    .qr-modal.show { display: flex; }
+    .qr-sheet { width: min(100%, 340px); padding: 18px; text-align: center; }
+    .qr-title { margin: 2px 0 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 17px; font-weight: 900; }
+    #qr-canvas {
+      min-width: 236px; min-height: 236px; display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 14px; padding: 14px; border-radius: 12px; background: #fff; border: var(--bw) solid var(--ink);
+    }
+    #qr-canvas canvas, #qr-canvas img { width: 220px; height: 220px; display: block; }
+    .qr-loading { color: var(--ink); font-size: 14px; font-weight: 800; }
+    .qr-close {
+      width: 100%; min-height: 46px; border: var(--bw) solid var(--ink); border-radius: 12px;
+      background: var(--teal); color: #fff; font-weight: 800; cursor: pointer; transition: transform 0.12s;
+    }
+
+    @media (max-width: 420px) {
+      body { padding-inline: 12px; }
+      .head-tag { font-size: 21px; padding: 0 14px; }
+      .username { font-size: 22px; }
+      .status-pill { font-size: 13px; padding: 5px 10px; }
+      .section-title { font-size: 25px; }
+      .meter-value { font-size: 22px; }
+      .cfg-num { width: 54px; flex-basis: 54px; font-size: 26px; }
+      .cfg-title { font-size: 15px; }
+      .cfg-label { padding-left: 30px; }
+      .cfg-actions { gap: 5px; padding: 0 8px; }
+      .cfg-btn { width: 36px; height: 36px; }
+      .happ-card { padding: 16px 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card login-card" id="login-card">
+      <h1 class="login-title">اشتراک</h1>
+      <label class="field-label" for="panel-url">آدرس پنل</label>
+      <input class="field" id="panel-url" type="url" placeholder="https://panel.example.com" autocomplete="off">
+      <label class="field-label" for="sub-token">لینک یا توکن</label>
+      <input class="field" id="sub-token" type="text" placeholder="https://.../sub/..." autocomplete="off">
+      <button type="button" class="primary-btn" id="btn-load">نمایش اشتراک</button>
+    </section>
+
+    <div id="error" class="error hidden"></div>
+
+    <div id="page-loading" class="page-loading hidden" role="status" aria-live="polite" aria-busy="true">
+      <span class="loading-text">در حال دریافت اطلاعات</span>
+    </div>
+
+    <div id="main">
+      <div id="announce" class="card announce hidden"></div>
+
+      <section class="profile">
+        <div class="head-card">
+          <div class="head-tag">اشتراک</div>
+          <div class="head-main">
+            <div class="head-user">
+              <p class="user-label">نام کاربر</p>
+              <h1 class="username" id="f-username">—</h1>
+            </div>
+            <span class="status-pill active" id="f-status">—</span>
+          </div>
+        </div>
+
+        <div class="meters">
+          <article class="meter data-meter">
+            <p class="meter-label">حجم باقیمانده</p>
+            <div class="meter-value" id="f-data-remain">—</div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="data-fill"><span class="progress-label" id="data-progress-label">—</span></div>
+            </div>
+            <div class="meter-note" id="f-data-percent">—</div>
+          </article>
+
+          <article class="meter time-meter">
+            <p class="meter-label">زمان باقیمانده</p>
+            <div class="meter-value" id="f-time-remain">—</div>
+            <div class="progress-track" aria-hidden="true">
+              <div class="progress-fill" id="time-fill"><span class="progress-label" id="time-progress-label">—</span></div>
+            </div>
+            <div class="meter-note" id="f-time-percent">—</div>
+          </article>
+        </div>
+      </section>
+
+      <div class="content-stack" id="pane-sub">
+        <section id="configs-section">
+          <div class="section-head">
+            <h2 class="section-title">
+              <svg viewBox="0 0 28 28" aria-hidden="true"><rect x="4" y="3" width="20" height="17" fill="#14183A"/><rect x="1" y="23" width="26" height="3" fill="#2B3A72"/></svg>
+              کانفیگ‌ها
+            </h2>
+            <span id="copy-all-wrap" class="hidden"></span>
+          </div>
+          <div class="cfg-card" id="config-content">
+            <div class="cfg-list" id="connections-list"></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-head">
+            <h2 class="section-title">
+              <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M13 4 2 14l11 10z" fill="#38767A"/><rect x="15" y="4" width="10" height="20" fill="#14183A"/></svg>
+              اپلیکیشن‌ها
+            </h2>
+          </div>
+          <div class="apps-grid" id="apps-list">
+            <article class="happ-card" data-platform="android">
+              <div class="happ-top">
+                <span class="happ-name">Happ</span>
+                <span class="happ-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.1 9.4h9.8c.5 0 .9.4.9.9v5.9c0 1.6-1.3 2.9-2.9 2.9h-.5v1.3c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-1.3h-.4v1.3c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-1.3h-.5c-1.6 0-2.9-1.3-2.9-2.9v-5.9c0-.5.4-.9.9-.9Zm1.5-4.7c.2-.3.6-.4.9-.2l1.1 1.8c.4-.1.9-.2 1.4-.2s1 .1 1.4.2l1.1-1.8c.2-.3.6-.4.9-.2.3.2.4.6.2.9l-1 1.6c1.1.7 1.9 1.8 2.1 3H7.3c.2-1.2 1-2.3 2.1-3l-1-1.6c-.2-.3-.1-.7.2-.9Zm2.1 7.5c-.4 0-.7.3-.7.7s.3.7.7.7.7-.3.7-.7-.3-.7-.7-.7Zm2.6 0c-.4 0-.7.3-.7.7s.3.7.7.7.7-.3.7-.7-.3-.7-.7-.7ZM4.8 10.1c.6 0 1.1.5 1.1 1.1v4.6c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-4.6c0-.6.5-1.1 1.1-1.1Zm14.4 0c.6 0 1.1.5 1.1 1.1v4.6c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-4.6c0-.6.5-1.1 1.1-1.1Z"/></svg></span>
+              </div>
+              <span class="happ-platform">برای اندروید</span>
+              <a class="happ-btn android" href="https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk" target="_blank" rel="noopener">دانلود فایل APK</a>
+            </article>
+
+            <article class="happ-card" data-platform="ios">
+              <div class="happ-top">
+                <span class="happ-name">Happ</span>
+                <span class="happ-icon"><svg viewBox="5 3 16 17" fill="currentColor" aria-hidden="true"><path d="M16.9 12.1c0-1.8 1.5-2.7 1.6-2.8-.9-1.2-2.2-1.4-2.6-1.4-1.1-.1-2.1.6-2.7.6-.6 0-1.4-.6-2.3-.6-1.2 0-2.4.7-3 1.8-1.3 2.2-.3 5.5.9 7.3.6.9 1.4 1.9 2.4 1.9.9 0 1.3-.6 2.4-.6s1.4.6 2.4.6 1.7-.9 2.3-1.8c.7-1 1-2.1 1-2.1-.1 0-2.4-.9-2.4-2.9zM15.2 6.7c.5-.6.8-1.4.8-2.2-.8 0-1.6.5-2.1 1.1-.5.5-.9 1.3-.8 2.1.8.1 1.6-.4 2.1-1z"/></svg></span>
+              </div>
+              <span class="happ-platform">برای آیفون</span>
+              <a class="happ-btn ios" href="https://apps.apple.com/us/app/happ-proxy-utility/id6504287215" target="_blank" rel="noopener">دریافت از App Store</a>
+            </article>
+          </div>
+          <p class="apps-hint">بعد از نصب، کانفیگ‌ها را از بخش بالا کپی کنید و داخل Happ اضافه کنید.</p>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="qr-modal" id="qr-modal" aria-hidden="true">
+    <section class="card qr-sheet" role="dialog" aria-modal="true" aria-labelledby="qr-title">
+      <h2 class="qr-title" id="qr-title">QR Code</h2>
+      <div id="qr-canvas" aria-label="QR Code"></div>
+      <button type="button" class="qr-close" id="qr-close">بستن</button>
+    </section>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var QR_LIBRARY_URL = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  var LS_PANEL = 'pg_panel_url';
+  var LS_TOKEN = 'pg_sub_token';
+  var LS_PAGE_PREFIX = 'pg_page_cache:';
+  var CACHE_TTL_MS = 10 * 60 * 1000;
+  var CACHE_MAX_ENTRIES = 12;
+  var APP_PLATFORM_ORDER = ['ios', 'android', 'windows', 'macos', 'linux', 'appletv', 'androidtv', 'other'];
+  var currentCtx = null;
+  var toastTimer;
+  var qrLibPromise = null;
+  var storedLinks = [];
+  var storedSubUrl = '';
+
+  var SVG_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  var SVG_STACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+  var SVG_NETWORK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.3 2.5 3.5 5.5 3.5 9S14.3 18.5 12 21"/><path d="M12 3C9.7 5.5 8.5 8.5 8.5 12S9.7 18.5 12 21"/></svg>';
+  var SVG_QR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6v6H4z"/><path d="M14 4h6v6h-6z"/><path d="M4 14h6v6H4z"/><path d="M14 14h2v2h-2z"/><path d="M18 14h2v2h-2z"/><path d="M14 18h2v2h-2z"/><path d="M18 18h2v-2h-2z"/></svg>';
+  var SVG_DOWNLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>';
+  var SVG_CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  var SVG_APPLE = '<svg class="apple-glyph" viewBox="5 3 16 17" fill="currentColor" aria-hidden="true"><path d="M16.9 12.1c0-1.8 1.5-2.7 1.6-2.8-.9-1.2-2.2-1.4-2.6-1.4-1.1-.1-2.1.6-2.7.6-.6 0-1.4-.6-2.3-.6-1.2 0-2.4.7-3 1.8-1.3 2.2-.3 5.5.9 7.3.6.9 1.4 1.9 2.4 1.9.9 0 1.3-.6 2.4-.6s1.4.6 2.4.6 1.7-.9 2.3-1.8c.7-1 1-2.1 1-2.1-.1 0-2.4-.9-2.4-2.9zM15.2 6.7c.5-.6.8-1.4.8-2.2-.8 0-1.6.5-2.1 1.1-.5.5-.9 1.3-.8 2.1.8.1 1.6-.4 2.1-1z"/></svg>';
+  var SVG_ANDROID = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.1 9.4h9.8c.5 0 .9.4.9.9v5.9c0 1.6-1.3 2.9-2.9 2.9h-.5v1.3c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-1.3h-.4v1.3c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-1.3h-.5c-1.6 0-2.9-1.3-2.9-2.9v-5.9c0-.5.4-.9.9-.9Zm1.5-4.7c.2-.3.6-.4.9-.2l1.1 1.8c.4-.1.9-.2 1.4-.2s1 .1 1.4.2l1.1-1.8c.2-.3.6-.4.9-.2.3.2.4.6.2.9l-1 1.6c1.1.7 1.9 1.8 2.1 3H7.3c.2-1.2 1-2.3 2.1-3l-1-1.6c-.2-.3-.1-.7.2-.9Zm2.1 7.5c-.4 0-.7.3-.7.7s.3.7.7.7.7-.3.7-.7-.3-.7-.7-.7Zm2.6 0c-.4 0-.7.3-.7.7s.3.7.7.7.7-.3.7-.7-.3-.7-.7-.7ZM4.8 10.1c.6 0 1.1.5 1.1 1.1v4.6c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-4.6c0-.6.5-1.1 1.1-1.1Zm14.4 0c.6 0 1.1.5 1.1 1.1v4.6c0 .6-.5 1.1-1.1 1.1s-1.1-.5-1.1-1.1v-4.6c0-.6.5-1.1 1.1-1.1Z"/></svg>';
+  var SVG_WINDOWS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h7v6H4V5zm9 0h7v6h-7V5zM4 13h7v6H4v-6zm9 0h7v6h-7v-6z"/></svg>';
+  var SVG_LINUX = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-2.4 0-4 2.1-4 5.1 0 1.5-.5 2.8-1.3 4.1L5 15.4C4.3 16.8 5.2 18 6.6 18h10.8c1.4 0 2.3-1.2 1.6-2.6l-1.7-3.2C16.5 10.9 16 9.6 16 8.1 16 5.1 14.4 3 12 3z"/><path d="M9 19.5 7.8 21"/><path d="M15 19.5l1.2 1.5"/><path d="M10 8h.01"/><path d="M14 8h.01"/></svg>';
+
+  function $(id) { return document.getElementById(id); }
+  function show(el, on) { if (el) el.classList.toggle('hidden', !on); }
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 1800);
+  }
+
+  function flash(btn) {
+    if (!btn) return;
+    btn.classList.add('copied');
+    setTimeout(function () { btn.classList.remove('copied'); }, 1000);
+  }
+
+  function setError(msg) {
+    var box = $('error');
+    if (!msg) {
+      box.textContent = '';
+      show(box, false);
+      return;
+    }
+    box.textContent = msg;
+    show(box, true);
+  }
+
+  function showMain(options) {
+    if (!options || !options.keepLoading) hideLoading();
+    show($('login-card'), false);
+    $('main').classList.add('visible');
+  }
+
+  function showLogin() {
+    hideLoading();
+    $('main').classList.remove('visible');
+    show($('login-card'), true);
+  }
+
+  function showLoading() {
+    show($('login-card'), false);
+    show($('page-loading'), true);
+  }
+
+  function hideLoading() {
+    show($('page-loading'), false);
+  }
+
+  function toPersianDigits(value) {
+    return String(value).replace(/\d/g, function (digit) {
+      return '۰۱۲۳۴۵۶۷۸۹'[digit];
+    });
+  }
+
+  function formatPercent(value) {
+    if (!isFinite(value)) return '—';
+    return toPersianDigits(Math.round(clamp(value, 0, 100))) + '٪';
+  }
+
+  function formatBytes(n) {
+    if (n == null || isNaN(n)) return '—';
+    if (n === 0) return '۰ بایت';
+    var u = ['بایت','کیلوبایت','مگابایت','گیگابایت','ترابایت'];
+    var i = Math.min(u.length - 1, Math.floor(Math.log(n) / Math.log(1024)));
+    var value = (n / Math.pow(1024, i)).toFixed(i > 1 ? 1 : 0).replace(/\.0$/, '');
+    return toPersianDigits(value) + ' ' + u[i];
+  }
+
+  function formatDate(v) {
+    if (!v) return 'نامحدود';
+    try {
+      return new Date(v).toLocaleDateString('fa-IR', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+      return String(v);
+    }
+  }
+
+  function timestampFromValue(value) {
+    if (value == null || value === '') return null;
+    var n = Number(value);
+    if (isFinite(n) && String(value).trim() !== '') {
+      if (n > 0 && n < 100000000000) n *= 1000;
+      return n;
+    }
+    var time = new Date(value).getTime();
+    return isFinite(time) ? time : null;
+  }
+
+  function formatRemainingDays(value) {
+    if (!value) return 'نامحدود';
+    var end = timestampFromValue(value);
+    if (!end) return formatDate(value);
+    var remaining = end - Date.now();
+    if (remaining <= 0) return 'تمام شده';
+    return toPersianDigits(Math.ceil(remaining / 86400000)) + ' روز';
+  }
+
+  function normalizeStatus(s) {
+    if (!s) return 'active';
+    if (typeof s === 'object' && s.name) return String(s.name).toLowerCase();
+    return String(s).toLowerCase();
+  }
+
+  function cleanToken(value) {
+    var token = String(value || '').trim().replace(/[\u200B-\u200D\uFEFF]/g, '');
+    token = token.replace(/^['"]|['"]$/g, '');
+    try { token = decodeURIComponent(token); } catch (e) {}
+    return token.replace(/^\/+|\/+$/g, '');
+  }
+
+  function tokenFromUrlObject(u) {
+    var keys = ['token', 'sub', 'sub_token', 'subscription', 'subscription_token'];
+    for (var i = 0; i < keys.length; i++) {
+      var found = u.searchParams.get(keys[i]);
+      if (found) {
+        var nested = parseTokenInput(found);
+        if (nested && nested.token) return nested;
+        return { token: cleanToken(found) };
+      }
+    }
+
+    if (!/^https?:$/i.test(u.protocol)) return null;
+    var subPath = u.pathname.replace(/\/+$/, '').replace(/\/(?:info|apps|links)$/i, '');
+    var parts = subPath.split('/').filter(Boolean);
+    var token = parts.length ? cleanToken(parts[parts.length - 1]) : '';
+    if (!token || /\.(?:html?|php)$/i.test(token)) return null;
+    return { token: token, subPath: subPath || ('/' + encodeURIComponent(token)) };
+  }
+
+  function parsePathInput(raw) {
+    var path = String(raw || '').trim();
+    if (path.charAt(0) !== '/') path = '/' + path;
+    path = path.split(/[?#]/)[0].replace(/\/+$/, '').replace(/\/(?:info|apps|links)$/i, '');
+    var parts = path.split('/').filter(Boolean);
+    var token = parts.length ? cleanToken(parts[parts.length - 1]) : '';
+    if (!token || /\.(?:html?|php)$/i.test(token)) return null;
+    return { token: token, subPath: path };
+  }
+
+  function parseTokenInput(raw) {
+    raw = (raw || '').trim().replace(/[\u200B-\u200D\uFEFF]/g, '');
+    if (!raw) return null;
+
+    try {
+      if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) {
+        var u = new URL(raw);
+        var parsedUrl = tokenFromUrlObject(u);
+        if (parsedUrl && parsedUrl.token) {
+          var panelParam = u.searchParams.get('panel') || u.searchParams.get('panel_url') || u.searchParams.get('base_url');
+          var panel = parsedUrl.panel || panelParam || (/^https?:$/i.test(u.protocol) ? u.origin : '');
+          return { panel: panel, token: parsedUrl.token, subPath: parsedUrl.subPath };
+        }
+        var hashParsed = parseTokenInput(u.hash.replace(/^#/, ''));
+        if (hashParsed && hashParsed.token) {
+          return { panel: hashParsed.panel || (/^https?:$/i.test(u.protocol) ? u.origin : ''), token: hashParsed.token, subPath: hashParsed.subPath };
+        }
+      }
+    } catch (e) {}
+
+    if (/^[^/?#\s]+\.[^/?#\s]+(?:[/?#].*)?$/i.test(raw)) {
+      try {
+        var looseUrl = new URL('https://' + raw);
+        var looseParsed = tokenFromUrlObject(looseUrl);
+        if (looseParsed && looseParsed.token) {
+          return { panel: looseUrl.origin, token: looseParsed.token, subPath: looseParsed.subPath };
+        }
+      } catch (e) {}
+    }
+
+    var panelMatch = raw.match(/^(https?:\/\/[^/?#\s]+)/i);
+    var pathMatch = raw.match(/(?:^|[/?#&\s])sub\/([^/?#&\s]+)/i);
+    if (pathMatch) {
+      var pathToken = cleanToken(pathMatch[1]);
+      return {
+        panel: panelMatch ? panelMatch[1] : undefined,
+        token: pathToken,
+        subPath: '/sub/' + encodeURIComponent(pathToken)
+      };
+    }
+
+    var queryMatch = raw.match(/(?:^|[?&#])(?:token|sub|sub_token|subscription|subscription_token)=([^&#\s]+)/i);
+    if (queryMatch) return { panel: panelMatch ? panelMatch[1] : undefined, token: cleanToken(queryMatch[1]) };
+
+    if (raw.indexOf('/') > -1 && raw.indexOf('://') === -1 && !/\s/.test(raw)) {
+      var pathParsed = parsePathInput(raw);
+      if (pathParsed) return pathParsed;
+    }
+
+    if (!/\s/.test(raw) && raw.indexOf('://') === -1 && raw.indexOf('/') === -1 && raw.indexOf('?') === -1 && raw.indexOf('#') === -1) {
+      return { token: cleanToken(raw) };
+    }
+    return null;
+  }
+
+  function resolveContext(panelInput, tokenInput) {
+    var parsed = tokenInput && typeof tokenInput === 'object' ? tokenInput : parseTokenInput(tokenInput);
+    if (!parsed) return null;
+    var panel = (parsed.panel || panelInput || '').trim().replace(/\/+$/, '');
+    if (panel && panel !== 'null' && !/^https?:\/\//i.test(panel)) panel = 'https://' + panel;
+    if (!panel || panel === 'null') {
+      var origin = window.location.origin;
+      if (/^https?:\/\//i.test(origin)) panel = origin;
+    }
+    if (!panel || panel === 'null' || !parsed.token) return null;
+    var subPath = parsed.subPath || ('/sub/' + encodeURIComponent(parsed.token));
+    if (subPath.charAt(0) !== '/') subPath = '/' + subPath;
+    subPath = subPath.replace(/\/+$/, '');
+    return {
+      panel: panel,
+      token: parsed.token,
+      subPath: subPath,
+      subUrl: panel + subPath,
+      infoUrl: panel + subPath + '/info',
+      appsUrl: panel + subPath + '/apps',
+      linksUrl: panel + subPath + '/links'
+    };
+  }
+
+  function detectFromCurrentUrl() {
+    var fromHref = parseTokenInput(window.location.href);
+    if (fromHref && fromHref.token) return resolveContext(fromHref.panel || '', fromHref);
+
+    var fromHash = parseTokenInput(window.location.hash.replace(/^#/, ''));
+    if (fromHash && fromHash.token) return resolveContext(fromHash.panel || '', fromHash);
+
+    var params = new URLSearchParams(window.location.search);
+    var panelParam = params.get('panel') || params.get('panel_url') || params.get('base_url') || window.location.origin;
+    var keys = ['token', 'sub', 'sub_token', 'subscription', 'subscription_token'];
+    for (var i = 0; i < keys.length; i++) {
+      var q = params.get(keys[i]);
+      if (q) return resolveContext(panelParam, q);
+    }
+    return null;
+  }
+
+  function cacheKey(ctx) {
+    var hash = 5381;
+    for (var i = 0; i < ctx.subUrl.length; i++) {
+      hash = ((hash << 5) + hash) ^ ctx.subUrl.charCodeAt(i);
+    }
+    return LS_PAGE_PREFIX + (hash >>> 0).toString(36);
+  }
+
+  function cleanupPageCache() {
+    try {
+      var now = Date.now();
+      var items = [];
+      for (var i = localStorage.length - 1; i >= 0; i--) {
+        var key = localStorage.key(i);
+        if (!key || key.indexOf(LS_PAGE_PREFIX) !== 0) continue;
+        var raw = localStorage.getItem(key);
+        var savedAt = 0;
+        try { savedAt = JSON.parse(raw || '{}').savedAt || 0; } catch (e) {}
+        if (!savedAt || now - savedAt > CACHE_TTL_MS) {
+          localStorage.removeItem(key);
+        } else {
+          items.push({ key: key, savedAt: savedAt });
+        }
+      }
+      items.sort(function (a, b) { return b.savedAt - a.savedAt; });
+      items.slice(CACHE_MAX_ENTRIES).forEach(function (item) {
+        localStorage.removeItem(item.key);
+      });
+    } catch (e) {}
+  }
+
+  function readPageCache(ctx) {
+    try {
+      var raw = localStorage.getItem(cacheKey(ctx));
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || data.subUrl !== ctx.subUrl || !data.savedAt || Date.now() - data.savedAt > CACHE_TTL_MS) {
+        localStorage.removeItem(cacheKey(ctx));
+        return null;
+      }
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writePageCache(ctx, data) {
+    try {
+      localStorage.setItem(cacheKey(ctx), JSON.stringify({
+        savedAt: Date.now(),
+        subUrl: ctx.subUrl,
+        user: data.user,
+        headers: data.headers || {},
+        links: data.links || []
+      }));
+      cleanupPageCache();
+    } catch (e) {}
+  }
+
+  function fetchWithTimeout(url, options, ms, message) {
+    options = options || {};
+    if (!window.AbortController) return fetch(url, options);
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, ms);
+    options.signal = controller.signal;
+    return fetch(url, options).then(function (res) {
+      clearTimeout(timer);
+      return res;
+    }).catch(function (err) {
+      clearTimeout(timer);
+      if (err && err.name === 'AbortError') throw new Error(message || 'Request timeout');
+      throw err;
+    });
+  }
+
+  function fetchInfo(ctx) {
+    return fetchWithTimeout(ctx.infoUrl, { credentials: 'same-origin', headers: { Accept: 'application/json' } }, 10000, 'خطا در دریافت اطلاعات')
+      .then(function (res) {
+        if (!res.ok) throw new Error('خطا در دریافت اطلاعات (' + res.status + ')');
+        return res.json().then(function (data) {
+          var headers = {};
+          ['announce', 'announce-url'].forEach(function (h) {
+            var v = res.headers.get(h);
+            if (v) headers[h] = v;
+          });
+          return { data: data, headers: headers };
+        });
+      });
+  }
+
+  function linkType(raw) {
+    var low = raw.toLowerCase();
+    if (low.indexOf('vless://') === 0) return 'vless';
+    if (low.indexOf('vmess://') === 0) return 'vmess';
+    if (low.indexOf('trojan://') === 0) return 'trojan';
+    if (low.indexOf('wireguard://') === 0) return 'wireguard';
+    if (low.indexOf('hysteria') === 0) return 'hysteria';
+    if (low.indexOf('ss://') === 0 || low.indexOf('shadowsocks') === 0) return 'shadowsocks';
+    return 'proxy';
+  }
+
+  function fetchLinks(ctx) {
+    return fetchWithTimeout(ctx.linksUrl, { credentials: 'same-origin' }, 8000, 'Links timeout')
+      .then(function (res) {
+        if (!res.ok) return [];
+        return res.text().then(function (text) {
+          return text.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(function (l) {
+            return l && linkType(l) !== 'proxy';
+          });
+        });
+      })
+      .catch(function () { return []; });
+  }
+
+  function renderPageData(ctx, data) {
+    if (!data) return;
+    if (data.user) renderUser(data.user);
+    renderAnnounce(data.headers || {});
+    renderConnections(ctx.subUrl, data.links || []);
+  }
+
+  function decodeAnnounce(raw) {
+    if (!raw) return '';
+    if (raw.indexOf('base64:') === 0) {
+      return decodeBase64Utf8(raw.slice(7).trim()) || raw.slice(7);
+    }
+    try { return decodeURIComponent(raw); } catch (e) { return raw; }
+  }
+
+  function renderAnnounce(headers) {
+    var msg = decodeAnnounce(headers.announce);
+    var url = headers['announce-url'];
+    var box = $('announce');
+    if (!msg && !url) {
+      box.innerHTML = '';
+      show(box, false);
+      return;
+    }
+    box.innerHTML = '<span class="announce-dot" aria-hidden="true"></span>' +
+      '<span class="announce-text">' +
+      (msg ? escapeHtml(msg) : 'اطلاعیه') +
+      (url ? ' <a href="' + escapeAttr(url) + '" target="_blank" rel="noopener">جزئیات</a>' : '') +
+      '</span>';
+    show(box, true);
+  }
+
+  function trafficPercent(user) {
+    var limit = Number(user && user.data_limit);
+    if (!isFinite(limit) || limit <= 0) return 100;
+    var used = Number(user.used_traffic) || 0;
+    return clamp((Math.max(0, limit - used) / limit) * 100, 0, 100);
+  }
+
+  // مدت‌های متداول اشتراک (به روز). اگر پلن دیگری دارید اینجا اضافه کنید.
+  var PLAN_DAYS = [30, 60, 90, 120, 180, 365];
+  var DAY_MS = 86400000;
+
+  // پنل فقط تاریخ ساخت و تاریخ انقضا را نگه می‌دارد و با هر تمدید، «زمان کل» جمع می‌شود.
+  // پس مدت آخرین پلن را از روی زمان باقیمانده و نزدیک‌ترین پلن متداول تخمین می‌زنیم.
+  function totalTimeMs(user, status) {
+    if (status === 'on_hold' && user.on_hold_expire_duration) {
+      return Number(user.on_hold_expire_duration) * 1000;
+    }
+    var end = timestampFromValue(status === 'on_hold' && user.on_hold_timeout ? user.on_hold_timeout : user.expire);
+    if (!end) return 0;
+    var start = timestampFromValue(user.created_at);
+    var remainDays = Math.max(0, Math.ceil((end - Date.now()) / DAY_MS));
+    var planDays = 0;
+    for (var i = 0; i < PLAN_DAYS.length; i++) {
+      if (PLAN_DAYS[i] >= remainDays) { planDays = PLAN_DAYS[i]; break; }
+    }
+    if (!planDays) planDays = Math.ceil(remainDays / 30) * 30;
+    var rawDays = start && start < end ? Math.ceil((end - start) / DAY_MS) : 0;
+    // اگر هنوز تمدید نشده (کل بازه از پلن بزرگ‌تر نیست)، همان مقدار واقعی را نشان بده
+    var days = rawDays && rawDays <= planDays ? rawDays : planDays;
+    return days * DAY_MS;
+  }
+
+  function timePercent(user, status) {
+    var end = timestampFromValue(status === 'on_hold' && user.on_hold_timeout ? user.on_hold_timeout : user.expire);
+    if (!end) return 100;
+    var now = Date.now();
+    if (now >= end) return 0;
+    var total = totalTimeMs(user, status);
+    if (!total) return 100;
+    return clamp(((end - now) / total) * 100, 0, 100);
+  }
+
+  function formatTotalDaysFromMs(ms) {
+    if (!isFinite(ms) || ms <= 0) return 'نامحدود';
+    return toPersianDigits(Math.ceil(ms / DAY_MS)) + ' روز';
+  }
+
+  function totalTimeText(user, status) {
+    return formatTotalDaysFromMs(totalTimeMs(user, status));
+  }
+
+  function renderUser(user) {
+    var status = normalizeStatus(user.status);
+    var labels = { active:'فعال', disabled:'غیرفعال', limited:'پایان ترافیک', expired:'پایان زمان اشتراک', on_hold:'در انتظار اولین اتصال' };
+    var name = user.username || '—';
+    var limit = Number(user.data_limit);
+    var used = Number(user.used_traffic) || 0;
+    var hasLimit = isFinite(limit) && limit > 0;
+    var dataRemain = hasLimit ? Math.max(0, limit - used) : null;
+    var dataPercent = trafficPercent(user);
+    var timeValue = status === 'on_hold' && user.on_hold_timeout ? user.on_hold_timeout : user.expire;
+    var timeText;
+
+    if (status === 'on_hold' && !user.on_hold_timeout && user.on_hold_expire_duration) {
+      timeText = toPersianDigits(Math.floor(user.on_hold_expire_duration / 86400)) + ' روز';
+    } else {
+      timeText = formatRemainingDays(timeValue);
+    }
+
+    $('f-username').textContent = name;
+    document.title = name && name !== '—' ? name : 'اشتراک';
+
+    $('f-status').textContent = labels[status] || status;
+    $('f-status').className = 'status-pill ' + status;
+
+    $('f-data-remain').textContent = hasLimit ? formatBytes(dataRemain) : 'نامحدود';
+    $('f-data-percent').textContent = hasLimit ? 'حجم کل ' + formatBytes(limit) : 'حجم کل نامحدود';
+    $('data-fill').style.setProperty('--p', dataPercent + '%');
+    $('data-progress-label').textContent = formatPercent(dataPercent);
+    $('data-fill').classList.toggle('low', dataPercent < 22);
+
+    var remainingTimePercent = timePercent(user, status);
+    $('f-time-remain').textContent = timeText;
+    $('f-time-percent').textContent = 'زمان کل ' + totalTimeText(user, status);
+    $('time-fill').style.setProperty('--p', remainingTimePercent + '%');
+    $('time-progress-label').textContent = formatPercent(remainingTimePercent);
+    $('time-fill').classList.toggle('low', remainingTimePercent < 22);
+  }
+
+  function copyText(text, btn) {
+    var done = function () {
+      toast('کپی شد');
+      flash(btn);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(done);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        done();
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+      document.body.removeChild(ta);
+    });
+  }
+
+  function loadQRCode() {
+    if (window.QRCode) return Promise.resolve();
+    if (qrLibPromise) return qrLibPromise;
+    qrLibPromise = new Promise(function (resolve, reject) {
+      var script = document.createElement('script');
+      script.src = QR_LIBRARY_URL;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = function () { reject(new Error('QR library failed to load')); };
+      document.head.appendChild(script);
+    });
+    return qrLibPromise;
+  }
+
+  function openQrModal(text, title) {
+    if (!text) return;
+    var modal = $('qr-modal');
+    var canvas = $('qr-canvas');
+    $('qr-title').textContent = title || 'QR Code';
+    canvas.innerHTML = '<span class="qr-loading">در حال ساخت QR</span>';
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+
+    loadQRCode().then(function () {
+      canvas.innerHTML = '';
+      try {
+        new QRCode(canvas, {
+          text: text,
+          width: 220,
+          height: 220,
+          colorDark: '#14183A',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (err) {
+        closeQrModal();
+        toast('لینک برای QR خیلی طولانی است');
+      }
+    }).catch(function () {
+      closeQrModal();
+      toast('خطا در ساخت QR');
+    });
+  }
+
+  function closeQrModal() {
+    var modal = $('qr-modal');
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    $('qr-canvas').innerHTML = '';
+  }
+
+  function safeDecode(value) {
+    if (!value) return '';
+    try { return decodeURIComponent(String(value).replace(/\+/g, '%20')); }
+    catch (e) { return String(value); }
+  }
+
+  function decodeBase64Utf8(value) {
+    try {
+      var normalized = String(value || '').replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+      while (normalized.length % 4) normalized += '=';
+      var binary = atob(normalized);
+      var encoded = Array.prototype.map.call(binary, function (ch) {
+        return '%' + ('00' + ch.charCodeAt(0).toString(16)).slice(-2);
+      }).join('');
+      return decodeURIComponent(encoded);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function configDisplayName(raw) {
+    raw = String(raw || '').trim();
+    if (!raw) return '';
+
+    if (raw.toLowerCase().indexOf('vmess://') === 0) {
+      try {
+        var vmessJson = decodeBase64Utf8(raw.slice(8));
+        var vmess = JSON.parse(vmessJson);
+        if (vmess && vmess.ps) return safeDecode(vmess.ps).trim();
+      } catch (e) {}
+    }
+
+    try {
+      var url = new URL(raw);
+      var hashName = safeDecode(url.hash.replace(/^#/, '')).trim();
+      if (hashName) return hashName;
+      var params = url.searchParams;
+      var paramName = params.get('name') || params.get('remark') || params.get('remarks') || params.get('tag');
+      if (paramName) return safeDecode(paramName).trim();
+    } catch (e) {}
+
+    var hashIndex = raw.indexOf('#');
+    if (hashIndex >= 0) return safeDecode(raw.slice(hashIndex + 1)).trim();
+    return '';
+  }
+
+  function linkLabel(raw) {
+    var low = raw.toLowerCase();
+    if (low.indexOf('vless://') === 0) return 'VLESS';
+    if (low.indexOf('vmess://') === 0) return 'VMess';
+    if (low.indexOf('trojan://') === 0) return 'Trojan';
+    if (low.indexOf('wireguard://') === 0) return 'WireGuard';
+    if (low.indexOf('hysteria') === 0) return 'Hysteria';
+    if (low.indexOf('ss://') === 0 || low.indexOf('shadowsocks') === 0) return 'Shadowsocks';
+    return 'Proxy';
+  }
+
+  function firstParam(params, keys) {
+    for (var i = 0; i < keys.length; i++) {
+      var values = params.getAll(keys[i]).filter(Boolean);
+      if (values.length) return values.join(', ');
+    }
+    return '';
+  }
+
+  function decodeUrlValue(value) {
+    try { return decodeURIComponent(String(value || '')); }
+    catch (e) { return String(value || ''); }
+  }
+
+  function normalizeWireGuardKey(value) {
+    return String(value || '').replace(/\s/g, '+');
+  }
+
+  function decodeWireGuardPayload(raw) {
+    var payload = String(raw || '').replace(/^wireguard:\/\//i, '').split('#')[0].split('?')[0].replace(/^\/+/, '');
+    payload = decodeUrlValue(payload);
+    if (payload.indexOf('[Interface]') >= 0) return payload;
+    var decoded = decodeBase64Utf8(payload);
+    if (decoded && decoded.indexOf('[Interface]') >= 0) return decoded;
+    return '';
+  }
+
+  function wireGuardConf(raw) {
+    raw = String(raw || '').trim();
+    if (!raw) return '';
+    if (/^\[Interface\]/i.test(raw)) return raw;
+
+    var decoded = decodeWireGuardPayload(raw);
+    if (decoded) return decoded;
+
+    try {
+      var url = new URL(raw);
+      var params = url.searchParams;
+      var privateKey = normalizeWireGuardKey(decodeUrlValue(url.username || firstParam(params, ['privatekey', 'privateKey', 'private_key'])));
+      var publicKey = normalizeWireGuardKey(firstParam(params, ['publickey', 'publicKey', 'public_key', 'peerpublickey', 'peerPublicKey', 'peer_public_key']));
+      var endpoint = firstParam(params, ['endpoint']) || url.host;
+      var address = firstParam(params, ['address', 'addresses', 'localaddress', 'localAddress', 'local_address', 'ip']);
+      var dns = firstParam(params, ['dns', 'dnsserver', 'dnsServer', 'dns_server']);
+      var mtu = firstParam(params, ['mtu']);
+      var presharedKey = normalizeWireGuardKey(firstParam(params, ['presharedkey', 'preSharedKey', 'preshared_key', 'psk']));
+      var allowedIps = firstParam(params, ['allowedips', 'allowedIPs', 'allowed_ips']) || '0.0.0.0/0, ::/0';
+      var keepalive = firstParam(params, ['persistentkeepalive', 'persistentKeepalive', 'persistent_keepalive', 'keepalive']) || '25';
+      var lines = ['[Interface]'];
+
+      if (privateKey) lines.push('PrivateKey = ' + privateKey);
+      if (address) lines.push('Address = ' + address);
+      if (dns) lines.push('DNS = ' + dns);
+      if (mtu) lines.push('MTU = ' + mtu);
+      lines.push('', '[Peer]');
+      if (publicKey) lines.push('PublicKey = ' + publicKey);
+      if (presharedKey) lines.push('PresharedKey = ' + presharedKey);
+      if (allowedIps) lines.push('AllowedIPs = ' + allowedIps);
+      if (endpoint) lines.push('Endpoint = ' + endpoint);
+      if (keepalive) lines.push('PersistentKeepalive = ' + keepalive);
+      return lines.join('\n') + '\n';
+    } catch (e) {
+      return raw;
+    }
+  }
+
+  function wireGuardFileName(title) {
+    var base = String(title || 'wireguard').trim().replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, '-').replace(/^-+|-+$/g, '');
+    if (!base) base = 'wireguard';
+    if (!/\.conf$/i.test(base)) base += '.conf';
+    return base;
+  }
+
+  function downloadTextFile(text, filename) {
+    var blob = new Blob([text], { type: 'application/x-wireguard-profile;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    toast('دانلود شد');
+  }
+
+  function actionBtnsHtml(canDownload) {
+    return '<span class="row-actions">' +
+      (canDownload ? '<button type="button" class="icon-btn btn-download" aria-label="دانلود کانفیگ">' + SVG_DOWNLOAD + '</button>' : '') +
+      '<button type="button" class="icon-btn btn-qr" aria-label="نمایش QR">' + SVG_QR + '</button>' +
+      '<button type="button" class="icon-btn btn-copy" aria-label="کپی">' + SVG_COPY + '</button>' +
+      '</span>';
+  }
+
+  var CFG_COLORS = ['blue', 'red', 'gold'];
+
+  function renderConnections(subUrl, links) {
+    storedSubUrl = subUrl;
+    storedLinks = links || [];
+    var html = '';
+    var allWrap = $('copy-all-wrap');
+
+    if (storedLinks.length > 1) {
+      allWrap.innerHTML = '<button type="button" class="copy-all-btn" id="btn-copy-all">' + SVG_COPY +
+        '<span>کپی همه کانفیگ‌ها · ' + toPersianDigits(storedLinks.length) + ' مورد</span></button>';
+      show(allWrap, true);
+      var allBtn = $('btn-copy-all');
+      allBtn.addEventListener('click', function () { copyText(storedLinks.join('\n'), allBtn); });
+    } else {
+      allWrap.innerHTML = '';
+      show(allWrap, false);
+    }
+
+    storedLinks.forEach(function (raw, idx) {
+      var label = linkLabel(raw);
+      var name = configDisplayName(raw);
+      var title = name || (label + ' · ' + (idx + 1));
+      var type = linkType(raw);
+      var num = toPersianDigits(idx < 9 ? '0' + (idx + 1) : String(idx + 1));
+      html += '<div class="cfg-row" data-idx="' + idx + '">' +
+        '<span class="cfg-num ' + CFG_COLORS[idx % 3] + '">' + num + '</span>' +
+        '<span class="cfg-label"><span class="cfg-title">' + escapeHtml(title) + '</span></span>' +
+        '<span class="cfg-actions">' +
+        (type === 'wireguard' ? '<button type="button" class="cfg-btn btn-download" aria-label="دانلود کانفیگ">' + SVG_DOWNLOAD + '</button>' : '') +
+        '<button type="button" class="cfg-btn btn-qr" aria-label="نمایش QR">' + SVG_QR + '</button>' +
+        '<button type="button" class="cfg-btn btn-copy" aria-label="کپی">' + SVG_COPY + '<span>کپی</span></button>' +
+        '</span></div>';
+    });
+
+    if (!storedLinks.length) {
+      html += '<div class="empty">هنوز کانفیگی دریافت نشده است.</div>';
+    }
+
+    $('connections-list').innerHTML = html;
+
+    $('connections-list').querySelectorAll('.cfg-row').forEach(function (row) {
+      var btn = row.querySelector('.btn-copy');
+      var qrBtn = row.querySelector('.btn-qr');
+      var downloadBtn = row.querySelector('.btn-download');
+
+      function rowPayload() {
+        var i = parseInt(row.getAttribute('data-idx'), 10);
+        var raw = storedLinks[i] || '';
+        return { text: raw, title: configDisplayName(raw) || linkLabel(raw) };
+      }
+
+      if (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          copyText(rowPayload().text, btn);
+        });
+      }
+      if (qrBtn) {
+        qrBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var payload = rowPayload();
+          openQrModal(payload.text, payload.title);
+        });
+      }
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var payload = rowPayload();
+          downloadTextFile(wireGuardConf(payload.text), wireGuardFileName(payload.title));
+        });
+      }
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function loadAll(ctx) {
+    setError('');
+    currentCtx = ctx;
+    var cached = readPageCache(ctx);
+    var hasCache = cached && cached.user;
+
+    if (hasCache) {
+      renderPageData(ctx, cached);
+    } else {
+      renderConnections(ctx.subUrl, []);
+      renderAnnounce({});
+    }
+
+    if (hasCache) {
+      showMain();
+    } else {
+      showMain({ keepLoading: true });
+      showLoading();
+    }
+
+    var pageData = {
+      user: hasCache ? cached.user : null,
+      headers: hasCache ? (cached.headers || {}) : {},
+      links: hasCache ? (cached.links || []) : []
+    };
+    var infoError = null;
+
+    var infoPromise = fetchInfo(ctx)
+      .then(function (info) {
+        pageData.user = info.data;
+        pageData.headers = info.headers || {};
+        renderUser(pageData.user);
+        renderAnnounce(pageData.headers);
+        localStorage.setItem(LS_PANEL, ctx.panel);
+        localStorage.setItem(LS_TOKEN, ctx.subUrl);
+        hideLoading();
+        showMain();
+      })
+      .catch(function (err) {
+        infoError = err;
+        hideLoading();
+        if (!hasCache) {
+          $('main').classList.remove('visible');
+          showLogin();
+          var msg = (infoError && infoError.message) || 'خطا در دریافت اطلاعات';
+          if (window.location.protocol === 'file:') msg += ' — فایل را روی همان دامنه پنل میزبانی کنید.';
+          setError(msg);
+        }
+      });
+
+    var linksPromise = fetchLinks(ctx)
+      .then(function (links) {
+        pageData.links = links || [];
+        renderConnections(ctx.subUrl, pageData.links);
+      })
+      .catch(function () { return []; });
+
+    Promise.all([infoPromise, linksPromise]).then(function () {
+      if (pageData.user) writePageCache(ctx, pageData);
+    });
+  }
+
+  function startFromForm() {
+    var ctx = resolveContext($('panel-url').value, $('sub-token').value);
+    if (!ctx) {
+      setError('لینک یا توکن معتبر نیست.');
+      return;
+    }
+    loadAll(ctx);
+  }
+
+  $('btn-load').addEventListener('click', startFromForm);
+  $('sub-token').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') startFromForm();
+  });
+  $('qr-close').addEventListener('click', closeQrModal);
+  $('qr-modal').addEventListener('click', function (e) {
+    if (e.target === $('qr-modal')) closeQrModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && $('qr-modal').classList.contains('show')) closeQrModal();
+  });
+
+  (function init() {
+    cleanupPageCache();
+    var savedPanel = localStorage.getItem(LS_PANEL);
+    var savedToken = localStorage.getItem(LS_TOKEN);
+    if (savedPanel) $('panel-url').value = savedPanel;
+    if (savedToken) $('sub-token').value = savedToken;
+
+    var auto = detectFromCurrentUrl();
+    if (auto) {
+      $('panel-url').value = auto.panel;
+      $('sub-token').value = auto.subUrl;
+      loadAll(auto);
+      return;
+    }
+
+    if (savedPanel && savedToken) {
+      var ctx = resolveContext(savedPanel, savedToken);
+      if (ctx) {
+        loadAll(ctx);
+        return;
+      }
+    }
+
+    showLogin();
+  })();
+})();
+  </script>
+</body>
+</html>
